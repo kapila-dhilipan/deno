@@ -29,7 +29,7 @@ app.use(helmet())
 routes.setup(app);
 
 app.get('*', (req, res) => res.status(200).send({
-    message: 'Welcome to site spectrum API V1.',
+    message: 'Welcome to site spectrum.',
 }));
 
 
