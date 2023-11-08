@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_HUB_CREDENTIALS = credentials('kapila25')  // Use the ID of your Docker Hub credentials
+        DOCKER_HUB_CREDENTIALS = credentials('kapila2511')  // Use the ID of your Docker Hub credentials
     }
 
     stages {
