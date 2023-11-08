@@ -1,32 +1,31 @@
 pipeline {
-    agent any
-
-    stages {
-        stage('Checkout') {
-            steps {
-                // Checkout your code from the Git repository
-                checkout scm
-            }
-        }
-
-        stage('Build and Push Docker Image') {
-            steps {
-                // Build and push the Docker image to Docker Hub
-                script {
-                    docker.build("your-docker-image-name:${BUILD_NUMBER}")
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-                        docker.image("your-docker-image-name:${BUILD_NUMBER}").push()
-                    }
-                }
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                // Use Docker Compose to redeploy the containers
-                sh 'docker-compose -f docker-compose.yml pull'
-                sh 'docker-compose -f docker-compose.yml up -d'
-            }
-        }
+  agent any
+  options {
+    buildDiscarder(logRotator(numToKeepStr: '5'))
+  }
+  environment {
+    DOCKERHUB_CREDENTIALS = credentials('dockerhub')
+  }
+  stages {
+    stage('Build') {
+      steps {
+        sh 'docker build -t kapila25/front:"${BUILD_NUMBER}" .'
+      }
     }
+    stage('Login') {
+      steps {
+        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+      }
+    }
+    stage('Push') {
+      steps {
+        sh 'docker push lloydmatereke/jenkins-docker-hub'
+      }
+    }
+  }
+  post {
+    always {
+      sh 'docker logout'
+    }
+  }
 }
