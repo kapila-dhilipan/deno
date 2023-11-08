@@ -1,16 +1,11 @@
 version: '3'
 services:
   frontend:
-    image: kapila25/front:f1 # Replace with your frontend image name and tag
+    image: kapila25/front:latest # Replace with your frontend image name and tag
     ports:
       - "80:3000"  # Map port 80 on the host to port 3000 in the container
     restart: always
 
-  backend:
-    image: kapila25/back:f1 # Replace with your frontend image name and tag
-    ports:
-      - ":4000"  # Map port 80 on the host to port 3000 in the container
-    restart: always
 
   
 
