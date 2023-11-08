@@ -1,35 +1,21 @@
 pipeline {
     agent any
 
-    environment {
-        DOCKER_HUB_CREDENTIALS = credentials('kapila2511')  // Use the ID of your Docker Hub credentials
-    }
-
     stages {
-        stage('Checkout') {
-            steps {
-                // Checkout your code from the Git repository
-                checkout scm
-            }
-        }
-
         stage('Build and Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('', DOCKER_HUB_CREDENTIALS) {
-                        def customImage = docker.build("kapila25/front:${BUILD_NUMBER}")
-                        customImage.push()
+                    withCredentials([string(credentialsId: 'kapila2511', variable: 'DOCKER_HUB_PASSWORD')]) {
+                        // Log in to Docker Hub securely using the Jenkins credentials
+                        sh "docker login -u kapila25 -p \$DOCKER_HUB_PASSWORD"
+
+                        // Build and push the Docker image
+                        docker.build("kapila25/front:61").push()
                     }
                 }
             }
         }
 
-        stage('Deploy') {
-            steps {
-                // Use Docker Compose to redeploy the containers
-                sh 'docker-compose -f docker-compose.yml pull'
-                sh 'docker-compose -f docker-compose.yml up -d'
-            }
-        }
+        // The rest of your pipeline stages
     }
 }
