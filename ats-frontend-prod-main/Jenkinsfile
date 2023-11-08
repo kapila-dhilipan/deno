@@ -2,18 +2,31 @@ pipeline {
     agent any
 
     stages {
+        stage('Checkout') {
+            steps {
+                // Checkout your code from the Git repository
+                checkout scm
+            }
+        }
+
         stage('Build and Push Docker Image') {
             steps {
+                // Build and push the Docker image to Docker Hub
                 script {
-                    // Copy the Docker Hub credentials configuration file to the Docker configuration directory
-                    sh "cp /docker/config.json ~/.docker/config.json"
-
-                    // Build and push the Docker image
-                    docker.build("kapila25/front:61").push()
+                    docker.build("your-docker-image-name:${BUILD_NUMBER}")
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+                        docker.image("your-docker-image-name:${BUILD_NUMBER}").push()
+                    }
                 }
             }
         }
 
-        // The rest of your pipeline stages
+        stage('Deploy') {
+            steps {
+                // Use Docker Compose to redeploy the containers
+                sh 'docker-compose -f docker-compose.yml pull'
+                sh 'docker-compose -f docker-compose.yml up -d'
+            }
+        }
     }
 }
