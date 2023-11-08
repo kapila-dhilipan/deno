@@ -5,13 +5,11 @@ pipeline {
         stage('Build and Push Docker Image') {
             steps {
                 script {
-                    withCredentials([string(credentialsId: 'kapila2511', variable: 'DOCKER_HUB_PASSWORD')]) {
-                        // Log in to Docker Hub securely using the Jenkins credentials
-                        sh "docker login -u kapila25 -p \$DOCKER_HUB_PASSWORD"
+                    // Copy the Docker Hub credentials configuration file to the Docker configuration directory
+                    sh "cp /docker/config.json ~/.docker/config.json"
 
-                        // Build and push the Docker image
-                        docker.build("kapila25/front:61").push()
-                    }
+                    // Build and push the Docker image
+                    docker.build("kapila25/front:61").push()
                 }
             }
         }
