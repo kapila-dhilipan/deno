@@ -1,0 +1,35 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_HUB_CREDENTIALS = credentials('kapila2511')  // Use the ID of your Docker Hub credentials
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout your code from the Git repository
+                checkout scm
+            }
+        }
+
+        stage('Build and Push Docker Image') {
+            steps {
+                script {
+                    docker.withRegistry('', DOCKER_HUB_CREDENTIALS) {
+                        def customImage = docker.build("kapila25/front:${BUILD_NUMBER}")
+                        customImage.push()
+                    }
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                // Use Docker Compose to redeploy the containers
+                sh 'docker-compose -f docker-compose.yml pull'
+                sh 'docker-compose -f docker-compose.yml up -d'
+            }
+        }
+    }
+}
