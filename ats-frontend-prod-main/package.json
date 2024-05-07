@@ -13,12 +13,14 @@
     "@testing-library/user-event": "^13.2.1",
     "all": "^0.0.0",
     "axios": "^1.1.3",
+    "chart.js": "^4.4.2",
     "classnames": "^2.3.1",
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
     "fuse.js": "^6.6.2",
     "html-to-draftjs": "^1.5.0",
     "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
     "react-circular-progressbar": "^2.1.0",
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.2.0",
@@ -69,12 +71,5 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.14.5",
     "@griffel/webpack-loader": "^2.0.13"
-  }
-},
-"overrides": {
-  "@fluentui/react": {
-    "peerDependencies": {
-      "react": "^17.0.2"
-    }
   }
 }
