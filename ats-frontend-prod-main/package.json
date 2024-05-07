@@ -71,3 +71,10 @@
     "@griffel/webpack-loader": "^2.0.13"
   }
 }
+"overrides": {
+  "@fluentui/react": {
+    "peerDependencies": {
+      "react": "^17.0.2"
+    }
+  }
+}
